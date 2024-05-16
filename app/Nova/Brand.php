@@ -2,31 +2,27 @@
 
 namespace App\Nova;
 
-use Laravel\Nova\Fields\BelongsTo;
-use Laravel\Nova\Fields\Currency;
+
 use Laravel\Nova\Fields\ID;
-use Laravel\Nova\Fields\Markdown;
-use Laravel\Nova\Fields\Number;
 use Laravel\Nova\Fields\Text;
+use Laravel\Nova\Fields\URL;
 use Laravel\Nova\Http\Requests\NovaRequest;
 
-class Product extends Resource
+class Brand extends Resource
 {
     /**
      * The model the resource corresponds to.
      *
-     * @var class-string<\App\Models\Product>
+     * @var class-string<\App\Models\Brand>
      */
-    public static $model = \App\Models\Product::class;
+    public static $model = \App\Models\Brand::class;
 
     /**
      * The single value that should be used to represent the resource when being displayed.
      *
      * @var string
      */
-    public static $title = 'id';
-
-    public static $showColumnBorders = true;
+    public static $title = 'name';
 
     /**
      * The columns that should be searched.
@@ -47,39 +43,25 @@ class Product extends Resource
     {
         return [
             ID::make()
-                ->sortable()
-                ->textAlign('center'),
+                ->sortable(),
 
             Text::make('Name')
-                ->required()
                 ->sortable()
-                ->showOnPreview()
-                ->placeholder('Product nomi'),
-
-            Markdown::make('Description')
                 ->required()
                 ->showOnPreview()
-                ->placeholder('Product haqida'),
+                ->placeholder('Brand nomi'),
 
-            Currency::make('Price')
+            URL::make('Website Url', 'website_url')
+                ->required()
+                ->showOnPreview()
+                ->placeholder('Brand url manzili'),
+
+            Text::make('Industry')
                 ->required()
                 ->sortable()
                 ->filterable()
                 ->showOnPreview()
-                ->textAlign('center')
-                ->placeholder('Product narxi'),
-
-            Number::make('Quantity')
-                ->required()
-                ->sortable()
-                ->showOnPreview()
-                ->textAlign('center')
-                ->placeholder('Product miqdori'),
-
-            BelongsTo::make('Brand')
-                ->sortable()
-                ->showOnPreview()
-                ->textAlign('center')
+                ->placeholder('Bozori'),
         ];
     }
 
