@@ -2,6 +2,7 @@
 
 namespace App\Providers;
 
+use App\Nova\Dashboards\Main;
 use Illuminate\Support\Facades\Gate;
 use Laravel\Nova\Nova;
 use Laravel\Nova\NovaApplicationServiceProvider;
@@ -16,6 +17,8 @@ class NovaServiceProvider extends NovaApplicationServiceProvider
     public function boot()
     {
         parent::boot();
+
+        Nova::withBreadcrumbs();
     }
 
     /**
@@ -55,7 +58,7 @@ class NovaServiceProvider extends NovaApplicationServiceProvider
     protected function dashboards()
     {
         return [
-            new \App\Nova\Dashboards\Main,
+            new Main,
         ];
     }
 
@@ -74,8 +77,8 @@ class NovaServiceProvider extends NovaApplicationServiceProvider
      *
      * @return void
      */
-    public function register()
+    public function register(): void
     {
-        //
+
     }
 }

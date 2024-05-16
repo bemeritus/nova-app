@@ -3,28 +3,28 @@
 namespace App\Nova;
 
 use Illuminate\Http\Request;
-use Illuminate\Validation\Rules;
-use Laravel\Nova\Fields\Gravatar;
+use Laravel\Nova\Fields\Currency;
 use Laravel\Nova\Fields\ID;
-use Laravel\Nova\Fields\Password;
+use Laravel\Nova\Fields\Markdown;
+use Laravel\Nova\Fields\Number;
 use Laravel\Nova\Fields\Text;
 use Laravel\Nova\Http\Requests\NovaRequest;
 
-class User extends Resource
+class Product extends Resource
 {
     /**
      * The model the resource corresponds to.
      *
-     * @var class-string<\App\Models\User>
+     * @var class-string<\App\Models\Product>
      */
-    public static $model = \App\Models\User::class;
+    public static $model = \App\Models\Product::class;
 
     /**
      * The single value that should be used to represent the resource when being displayed.
      *
      * @var string
      */
-    public static $title = 'name';
+    public static $title = 'id';
 
     public static $showColumnBorders = true;
 
@@ -34,7 +34,7 @@ class User extends Resource
      * @var array
      */
     public static $search = [
-        'id', 'name', 'email',
+        'id', 'name'
     ];
 
     /**
@@ -50,24 +50,31 @@ class User extends Resource
                 ->sortable()
                 ->textAlign('center'),
 
-            Gravatar::make()->maxWidth(50),
-
             Text::make('Name')
+                ->required()
                 ->sortable()
-                ->rules('required', 'max:255')
-                ->textAlign('center'),
+                ->showOnPreview()
+                ->placeholder('Product nomi'),
 
-            Text::make('Email')
+            Markdown::make('Description')
+                ->required()
+                ->showOnPreview()
+                ->placeholder('Product haqida'),
+
+            Currency::make('Price')
+                ->required()
                 ->sortable()
-                ->rules('required', 'email', 'max:254')
-                ->creationRules('unique:users,email')
-                ->updateRules('unique:users,email,{{resourceId}}')
-                ->textAlign('center'),
+                ->filterable()
+                ->showOnPreview()
+                ->textAlign('center')
+                ->placeholder('Product narxi'),
 
-            Password::make('Password')
-                ->onlyOnForms()
-                ->creationRules('required', Rules\Password::defaults())
-                ->updateRules('nullable', Rules\Password::defaults()),
+            Number::make('Quantity')
+                ->required()
+                ->sortable()
+                ->showOnPreview()
+                ->textAlign('center')
+                ->placeholder('Product miqdori')
         ];
     }
 
