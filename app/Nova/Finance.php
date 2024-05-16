@@ -3,28 +3,30 @@
 namespace App\Nova;
 
 
+use App\Nova\Metrics\CountAmountFinances;
+use App\Nova\Metrics\SumFinances;
+use Laravel\Nova\Fields\BelongsTo;
+use Laravel\Nova\Fields\Currency;
 use Laravel\Nova\Fields\ID;
-use Laravel\Nova\Fields\Text;
-use Laravel\Nova\Fields\URL;
+use Laravel\Nova\Fields\Number;
 use Laravel\Nova\Http\Requests\NovaRequest;
 
-class Brand extends Resource
+class Finance extends Resource
 {
     /**
      * The model the resource corresponds to.
      *
-     * @var class-string<\App\Models\Brand>
+     * @var class-string<\App\Models\Finance>
      */
-    public static $model = \App\Models\Brand::class;
-
-    public static $showColumnBorders = true;
+    public static $model = \App\Models\Finance::class;
 
     /**
      * The single value that should be used to represent the resource when being displayed.
      *
      * @var string
      */
-    public static $title = 'name';
+    public static $title = 'id';
+    public static $showColumnBorders = true;
 
     /**
      * The columns that should be searched.
@@ -32,7 +34,7 @@ class Brand extends Resource
      * @var array
      */
     public static $search = [
-        'id', 'name'
+        'id',
     ];
 
     /**
@@ -48,25 +50,23 @@ class Brand extends Resource
                 ->sortable()
                 ->textAlign('center'),
 
-            Text::make('Name')
+            BelongsTo::make('Product')
                 ->sortable()
-                ->required()
                 ->showOnPreview()
-                ->placeholder('Brand nomi')
                 ->textAlign('center'),
 
-            URL::make('Website Url', 'website_url')
+            Number::make('Amount')
                 ->required()
+                ->sortable()
                 ->showOnPreview()
-                ->placeholder('Brand url manzili'),
+                ->textAlign('center'),
 
-            Text::make('Industry')
+            Currency::make('Price')
                 ->required()
                 ->sortable()
                 ->filterable()
                 ->showOnPreview()
-                ->placeholder('Bozori')
-                ->textAlign('center'),
+                ->textAlign('center')
         ];
     }
 
@@ -76,9 +76,12 @@ class Brand extends Resource
      * @param NovaRequest $request
      * @return array
      */
-    public function cards(NovaRequest $request): array
+    public function cards(NovaRequest $request)
     {
-        return [];
+        return [
+            new SumFinances(),
+            new CountAmountFinances()
+        ];
     }
 
     /**
@@ -87,7 +90,7 @@ class Brand extends Resource
      * @param NovaRequest $request
      * @return array
      */
-    public function filters(NovaRequest $request): array
+    public function filters(NovaRequest $request)
     {
         return [];
     }
@@ -98,7 +101,7 @@ class Brand extends Resource
      * @param NovaRequest $request
      * @return array
      */
-    public function lenses(NovaRequest $request): array
+    public function lenses(NovaRequest $request)
     {
         return [];
     }
@@ -109,7 +112,7 @@ class Brand extends Resource
      * @param NovaRequest $request
      * @return array
      */
-    public function actions(NovaRequest $request): array
+    public function actions(NovaRequest $request)
     {
         return [];
     }

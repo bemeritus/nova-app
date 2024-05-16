@@ -2,8 +2,15 @@
 
 namespace App\Providers;
 
+use App\Nova\Brand;
 use App\Nova\Dashboards\Main;
+use App\Nova\Finance;
+use App\Nova\Product;
+use App\Nova\User;
+use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Gate;
+use Laravel\Nova\Menu\MenuItem;
+use Laravel\Nova\Menu\MenuSection;
 use Laravel\Nova\Nova;
 use Laravel\Nova\NovaApplicationServiceProvider;
 
@@ -19,6 +26,25 @@ class NovaServiceProvider extends NovaApplicationServiceProvider
         parent::boot();
 
         Nova::withBreadcrumbs();
+
+        Nova::mainMenu(function (Request $request) {
+            return [
+
+                MenuSection::make('Shop', [
+                    MenuItem::resource(Brand::class),
+                    MenuItem::resource(Product::class),
+                ])->icon('shopping-bag')->collapsable(),
+
+                MenuSection::make('Finance', [
+                    MenuItem::resource(Finance::class),
+                ])->icon('currency-dollar')->collapsable(),
+
+                MenuSection::make('Users', [
+                    MenuItem::resource(User::class),
+                ])->icon('users')->collapsable(),
+            ];
+        });
+
     }
 
     /**
@@ -81,4 +107,5 @@ class NovaServiceProvider extends NovaApplicationServiceProvider
     {
 
     }
+
 }
